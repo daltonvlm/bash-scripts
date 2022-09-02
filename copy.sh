@@ -26,7 +26,7 @@ function help() {
 function main() {
     test "$file" = -h && help
     test ! $file && help 1
-    test -f "$file" || echo "File not found." && exit 1
+    test ! -f "$file" && echo "File not found." && exit 1
     cat "$file" | xclip -selection clipboard
 }
 
