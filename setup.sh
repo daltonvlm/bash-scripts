@@ -21,16 +21,14 @@ function help() {
 }
 
 function main() {
-    test "$help" = -h && help
-
     local bin=~/bin
 
-    mkdir -p "$bin"
+    test "$help" = -h && help
 
-    for f in `ls -I "$prog" -Idefault.sh`
+    mkdir -p "$bin"
+    for f in `ls -I "$prog" -Idefault.sh -I*[^.sh]`
     do
-        cp "$f" "$bin"
-        chmod +x "${bin}/$f"
+        chmod +x "$f" && ln -sf ${PWD}/"$f" "$bin"
     done
 }
 
