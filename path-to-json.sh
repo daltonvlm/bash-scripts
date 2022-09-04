@@ -31,7 +31,7 @@ function buildJson() {
     local path="$1"
     local spaces="$2"
     local name=`basename "$path"`
-    local size=`du -hs "$path" | tr [:space:] _ | cut -d'_' -f1`
+    local size=`du -hs "$path" | tr [:blank:] '_' | cut -d_ -f1`
     local comma=
     local children=`ls "$path"`
 
@@ -69,5 +69,6 @@ function main() {
 
 prog=`basename "$0"`
 path=`echo "${1:-.}" | cut -d' ' -f1`
+test "$path" = "/" || path=`echo ${@%/}`
 
 main
