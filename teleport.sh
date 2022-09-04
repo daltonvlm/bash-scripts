@@ -12,11 +12,6 @@
 # Since: 2022-08-31
 #
 
-# Must be fixed since it will be called by this way: '. teleport ...'
-prog=teleport
-file=$1
-path=${2:-.}
-
 function help() {
     echo "Change directory to the first directory containing a file with the given name from the given path. Search is made ignoring case."
     echo ""
@@ -29,19 +24,30 @@ function help() {
 }
 
 function main() {
+    test ! "$file" && help 1
     test "$file" = -h && help
-    test ! $file && help 1
+    test ! -e "$path" && >&2 printf "Path '%s' not found.\n" "$path" && exit 1
+    test ! -d "$path" && >&2 printf "'%s' is not a directory.\n" "$path" && exit 1
 
-    local dirs=`find "$path" -type f -iname "$file" \
-        -exec dirname {} \; 2>/dev/null`
+    local dirs=
+    local dir=
 
-    test $dirs && echo -e "Found:\n$dirs"
+    dirs=`find "$path" -type f -iname "$file" -exec dirname {} \; 2>/dev/null`
 
-    local dir=`echo "$dirs" | tr "\n" : | cut -d: -f1`
+    test ! "$dirs" && 2>1 echo "No directories found." && exit 1
 
-    test $dir && cd $dir && \
-        echo Changed directory to $dir. ||\
-        echo "Directory not found."
+    echo -e "Found:\n$dirs"
+
+    dir=`echo "$dirs" | tr "\n" : | cut -d: -f1`
+
+    test "$dir" && cd "$dir" && \
+        printf "Changed directory to '%s'.\n" "$dir" ||\
+        >&2 printf "Couldn't enter in '%s'.\n" "$dir"
 }
+
+# Must be fixed since it will be called by this way: '. teleport ...'
+prog=teleport
+file="$1"
+path="${2:-.}"
 
 main
