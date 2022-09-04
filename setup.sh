@@ -7,9 +7,6 @@
 # Since: 2022-08-31
 #
 
-prog=`basename $0`
-help=$1
-
 function help() {
     echo "Set the scripts for use."
 
@@ -21,9 +18,9 @@ function help() {
 }
 
 function main() {
-    local bin=~/bin
-
     test "$help" = -h && help
+
+    local bin=~/bin
 
     mkdir -p "$bin"
     for f in `ls -I "$prog" -Idefault.sh -I*[^.sh]`
@@ -31,5 +28,8 @@ function main() {
         chmod +x "$f" && ln -sf ${PWD}/"$f" "$bin"
     done
 }
+
+prog=`basename "$0"`
+help="$1"
 
 main
