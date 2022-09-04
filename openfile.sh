@@ -11,10 +11,6 @@
 # Since: 2022-08-31
 #
 
-prog=`basename $0`
-file=$1
-path=${2:-.}
-
 function help() {
     echo "Open the first file found with the given name from the given path."
     echo ""
@@ -27,9 +23,15 @@ function help() {
 }
 
 function main() {
+    test ! "$file" && help 1
     test "$file" = -h && help
-    test ! $file && help 1
+    test ! -e "$path" && >&1 printf "Path '%s' not found.\n" "$path" && exit 1
+    test ! -d "$path" && >&1 printf "'%s' is not a directory.\n" "$path" && exit 1
     find "$path" -name "$file" -exec editor {} \; 
 }
+
+prog=`basename "$0"`
+file=`echo "$1" | cut -d' ' -f1`
+path="${2:-.}"
 
 main
