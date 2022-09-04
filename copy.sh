@@ -10,8 +10,8 @@
 # Since: 2022-08-31
 #
 
-prog=`basename $0`
-file=$1
+prog=`basename "$0"`
+file="$1"
 
 function help() {
     echo "Copy file to clipboard."
@@ -24,9 +24,9 @@ function help() {
 }
 
 function main() {
+    test ! "$file" && help 1
     test "$file" = -h && help
-    test ! $file && help 1
-    test ! -f "$file" && echo "File not found." && exit 1
+    test ! -f "$file" && >&2 echo "File not found." && exit 1
     cat "$file" | xclip -selection clipboard
 }
 
