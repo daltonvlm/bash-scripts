@@ -61,9 +61,9 @@ function buildJson() {
 function main() {
     test ! "$path" && help 1
     test "$path" = -h && help
+    test ! -e "$path" && >&2 printf "File '%s' not found.\n" "$path" && exit 1
 
-    #buildJson "$path"
-    buildJson
+    buildJson "$path"
     echo
 } 
 
