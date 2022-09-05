@@ -67,8 +67,9 @@ function main() {
     echo
 } 
 
+
 prog=`basename "$0"`
 path=`echo "${1:-.}" | cut -d' ' -f1`
-test "$path" = "/" || path=`echo ${@%/}`
+test "$path" = "/" || path=`echo ${path%/}`
 
 main
