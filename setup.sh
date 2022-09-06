@@ -21,9 +21,11 @@ function main() {
     test "$help" = -h && help
 
     local bin=~/bin
+    local ignore=`cat .gitignore`
 
     mkdir -p "$bin"
-    for f in `ls -I "$prog" -Idefault.sh -I*[^.sh]`
+
+    for f in `ls -I"$prog" -I"$ignore"  -I*[^.sh]`
     do
         chmod +x "$f" && ln -sf ${PWD}/"$f" "$bin"
     done
