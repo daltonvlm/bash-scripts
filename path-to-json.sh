@@ -10,6 +10,8 @@
 # Since: 2022-09-04
 #
 
+# TODO: handle file names with spaces
+
 function help() {
     echo "Build a json representing a directory structure from the given path."
     echo ""
@@ -50,7 +52,7 @@ function buildJson() {
     for child in $children;
     do
         echo -en "$comma"
-        buildJson ${path}/$child "${spaces:-  }${spaces:-  }"
+        buildJson "${path}/$child" "${spaces:-  }${spaces:-  }"
         comma=',\n'
     done
 
